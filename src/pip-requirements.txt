@@ -1,0 +1,7 @@
+# Note that there are problems when using pip to install these packages as they depend on underlaying libraries.
+# Installing this using `pip install -r requirements.txt` will most likely fail. I used apt to install the libraries
+# by calling `apt-get install python-numpy python-scipy python-matplotlib`. Requests can be installed using pip.
+numpy==1.9.2
+requests==2.7.0
+scipy==0.14.1
+matplotlib==1.4.2
