@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 
-import __init__
 import requests
 import numpy as np
 import matplotlib.pyplot as plot
@@ -117,9 +116,9 @@ if __name__ == '__main__':
     argsparser = argparse.ArgumentParser(description=DESCRIPTION)
     argsparser.add_argument('--file', type=str,
             help='File where the data is located, if omitted request to the local Django server will be made')
-    argsparser.add_argument('--c', type=bool,
+    argsparser.add_argument('-c', action='store_true',
             help='Prints the pearson correlation values for all metrics')
-    argsparser.add_argument('--p', type=bool,
+    argsparser.add_argument('-p', action='store_true',
             help='Plots scatter charts for some of the metrics')
 
     args = argsparser.parse_args()
@@ -137,16 +136,16 @@ if __name__ == '__main__':
     dict_arr_handwritten = create_data_entries(jsonarr_handwritten, db_metrics)
     dict_arr_sbs = create_data_entries(jsonarr_sbs, db_metrics)
 
-    if args.correlate:
+    if args.c:
         correlations = correlate_all(dict_arr_srcfiles)
         sorted_correlations = sorted(correlations, key=lambda entry: entry['value'])
         for correlation in sorted_correlations:
             print correlation['label']
 
-    if args.plot:
-        plot_new_window(dict_arr_handwritten['nloc'], dict_arr_handwritten['defect_density_abc'])
+    if args.p:
+        plot_new_window(dict_arr_all['contributors_tr'], dict_arr_all['defect_density_abc'])
         plot_new_window(dict_arr_handwritten['contributors_tr'], dict_arr_handwritten['defect_density_abc'])
-        plot_new_window(dict_arr_handwritten['contributors_cm'], dict_arr_handwritten['defect_density_abc'])
-        plot_new_window(dict_arr_handwritten['nloc'], dict_arr_handwritten['defect_density'])
+        plot_new_window(dict_arr_handwritten['contributors_tr'], dict_arr_handwritten['defects_abc'])
+        plot_new_window(dict_arr_handwritten['contributors_tr'], dict_arr_handwritten['cyclomatic_complexity'])
         plot.show()
 
