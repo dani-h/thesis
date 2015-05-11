@@ -111,6 +111,11 @@ if __name__ == '__main__':
     The data is fetched from a local file or from a Django server that serves the data from
         `localhost:8000/contributors_defects_data/`
     It displays plots using matplotlib and calculates the perason correlation using scipy.
+
+    Tips:
+    If trying to quickly find a single corrleation between two metrics pipe the output to grep.
+    Example: ./statistics.py --file data.json -c | egrep -i "contributors cm.*defects abc".
+    This will case insensitive grep for the line containing both `contributors cm` and `defects abc`.
     '''
 
     argsparser = argparse.ArgumentParser(description=DESCRIPTION)
@@ -137,15 +142,19 @@ if __name__ == '__main__':
     dict_arr_sbs = create_data_entries(jsonarr_sbs, db_metrics)
 
     if args.c:
-        correlations = correlate_all(dict_arr_srcfiles)
+        correlations = correlate_all(dict_arr_handwritten)
         sorted_correlations = sorted(correlations, key=lambda entry: entry['value'])
         for correlation in sorted_correlations:
             print correlation['label']
 
     if args.p:
-        plot_new_window(dict_arr_all['contributors_tr'], dict_arr_all['defect_density_abc'])
-        plot_new_window(dict_arr_handwritten['contributors_tr'], dict_arr_handwritten['defect_density_abc'])
-        plot_new_window(dict_arr_handwritten['contributors_tr'], dict_arr_handwritten['defects_abc'])
-        plot_new_window(dict_arr_handwritten['contributors_tr'], dict_arr_handwritten['cyclomatic_complexity'])
+        plot_new_window(dict_arr_all['contributors_tr'], dict_arr_all['defect_density_abc'],
+                suptitle="Contributors TR and defects a,b,c for all files")
+        plot_new_window(dict_arr_handwritten['contributors_tr'], dict_arr_handwritten['defect_density_abc'],
+                suptitle="Contributors TR and defect density a,b,c for source files (c, cpp, cc)")
+        plot_new_window(dict_arr_handwritten['contributors_tr'], dict_arr_handwritten['defects_abc'],
+                suptitle="Contributors TR and defects a,b,c for source files")
+        plot_new_window(dict_arr_handwritten['contributors_tr'], dict_arr_handwritten['cyclomatic_complexity'],
+                suptitle="Contributors TR and cyclomatic complexity")
         plot.show()
 
