@@ -14,4 +14,6 @@
 *.aux
 *.bbl
 *.pdf
+
 paper/IEEE_template
+pictures/
